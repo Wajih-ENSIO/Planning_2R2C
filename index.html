@@ -32,7 +32,7 @@ td.av{min-width:120px;padding:6px 8px}
 .pct{font-size:11px;color:var(--mut)}
 select.st{appearance:none;-webkit-appearance:none;border:0;border-radius:12px;padding:4px 10px;font:600 12px system-ui;text-align:center;cursor:pointer;color:#fff}
 .s0{background:#9ca3af}.s1{background:#2563eb}.s2{background:#16a34a}.s3{background:#dc2626}
-td.cm{min-width:170px;text-align:left;padding:4px 8px}td.cm input{width:100%;border:0;background:none;font:inherit;color:var(--mut)}
+td.cm{min-width:170px;text-align:left;padding:4px 8px}td.cm input{width:100%;border:0;background:none;font:inherit;color:var(--mut)}td.cm .ct{display:none}
 td.w{min-width:120px;vertical-align:top;cursor:pointer;border-left:1px solid var(--line);padding:3px}
 td.w:hover{background:#eff6ff}
 .cell{display:flex;flex-direction:column;align-items:flex-start;height:100%;min-height:26px;gap:3px;border-radius:4px}
@@ -49,10 +49,11 @@ td.w:hover{background:#eff6ff}
 @media print{
  @page{size:A4 landscape;margin:10mm}
  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- header,.hint,.noprint,td.cm,th.cm,td.site .x,#pop{display:none!important}
+ header,.hint,.noprint,td.site .x,#pop{display:none!important}
  .wrap{margin:0;border:0;overflow:visible}td.site,th{position:static}
  #ptitle{display:block;margin:0 0 6px}#ptitle h1{margin:0;font-size:20px}#ptitle p{margin:2px 0 0;color:var(--mut)}
  #plegend{display:flex!important;padding:6px 0}.pfoot{display:block;color:var(--mut);font-size:11px;margin-top:6px}
+ td.cm{min-width:0;max-width:220px;vertical-align:top}td.cm input{display:none}td.cm .ct{display:block;white-space:pre-wrap;font-size:11px;color:var(--ink)}
  td.w{cursor:default}.cell.empty{border:0}tr{break-inside:avoid}
 }
 </style></head><body>
@@ -129,7 +130,7 @@ function renderTable(){
   h+=`<tr><td class="site">${esc(s.n)}<span class="x noprint" onclick="delSite(${i})" title="Supprimer">✕</span></td>
   <td class="av"><div class="bar"><b style="width:${p}%"></b></div><div class="pct">${p}%</div></td>
   <td><select class="st s${s.st}" onchange="S.sites[${i}].st=+this.value;save();renderTable()">${ST.map((x,k)=>`<option value="${k}" ${k==s.st?"selected":""}>${x}</option>`).join("")}</select></td>
-  <td class="cm"><input value="${esc(s.c)}" onchange="S.sites[${i}].c=this.value;save()" placeholder="…"></td>`+
+  <td class="cm"><input value="${esc(s.c)}" oninput="S.sites[${i}].c=this.value;this.nextElementSibling.textContent=this.value;save()" placeholder="…"><span class="ct">${esc(s.c)}</span></td>`+
   wks.map(w=>{const a=(pp[w]||[]).filter(o=>wk(o.k));
    return `<td class="w" onclick="openPop(event,${i},${w})"><div class="cell ${a.length?"":"empty"}">${a.map(o=>{const x=wk(o.k);return `<span style="background:${x.color};color:${ink(x.color)}">${esc(lab(o))}</span>`}).join("")}</div></td>`}).join("")+`</tr>`;
  });
